@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <style>
+           #myCanvas {
+                position: relative;
+                margin: 0;
+                /* transform: rotateZ(-30deg); */
+                transform-style: preserve-3d;
+            }
+
+        </style>
+        
+    </head>
+    <body>
+        <canvas id="myCanvas"></canvas>        
+        <script>
+        // const onLoadListener = ()=>{
+        //         drawBridgetRiley(canvas);
+        // }       
+        
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function melbaEvent(event){
+                console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
+            //document.getElementById('myCanvas').style.webkitTransform =
+            document.getElementById('myCanvas').style.transform ='rotateZ(' + event.alpha + 'deg)';
+            }); 
+        }else{
+            console.log("Not supported");
+        }
+
+        // if (('ondevicemotion' in window)) {
+        //     window.addEventListener('devicemotion', function(event) {
+        //         document.getElementById('acceleration-x').innerHTML = Math.round(event.acceleration.x);
+        //         document.getElementById('acceleration-y').innerHTML = Math.round(event.acceleration.y);
+        //         document.getElementById('acceleration-z').innerHTML = Math.round(event.acceleration.z);
+        //     });
+        // } else {
+        //     console.log("Not supported");
+        // }
+
+            
+        var canvas=document.getElementById("myCanvas");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            var date;
+	        var pageLoadStartTime, canvasRenderStartTime, pageLoadTime, canvasRenderTime;
+    
+    
+            if(document.readyState === 'loading'){
+                date = new Date();
+                console.log(`Page starts to load at ${date} | value in milliSeconds: ${date.getTime()}`);
+                pageLoadStartTime = date.getTime();
+            }
+        
+            document.onreadystatechange =  (event)=> {
+                if (document.readyState === 'complete') {
+                    date = new Date();
+                    console.log(`Page finished loading at ${date} | value in milliSeconds: ${date.getTime()}`);
+                    pageLoadTime = date.getTime() - pageLoadStartTime;
+                    console.log(`Page load time: ${pageLoadTime} ms`);
+                }
+            }
+
+        //function drawBridgetRiley(canvas){
+            var width = canvas.width;
+            var height = canvas.height;
+            // canvas.style.left = "0";
+            // canvas.style.top = "0";
+            // console.log("Left:"+canvas.style.left+ ", Top:"+canvas.style.top);
+            // console.log("event x"+evt.acceleration.x);
+            // console.log("event y"+evt.acceleration.y);
+            
+            // if (evt.acceleration.x > canvas.style.left) {
+            //     canvas.style.left = evt.acceleration.x;
+            // }
+            // if (evt.acceleration.y > canvas.style.top) {
+            //     canvas.style.top = evt.acceleration.y;
+            // }
+            
+            // //canvas.style.top = canvas.style.top + event["beta"]*3;
+            // console.log("Left:"+canvas.style.left + ", Top:"+canvas.style.top);
+            
+            date = new Date();
+            var c1 = canvas.getContext('2d');
+            console.log(`Image rendering started at ${date} | value in milliSeconds: ${date.getTime()}`);
+			canvasRenderStartTime = date.getTime();
+            c1.clearRect(0, 0, width, height);
+            var scaleX = parseInt(width*0.01), scaleY = parseInt(width*0.01);
+            var numberOfY = parseInt(height/(scaleY));
+            var numberOfX = parseInt(width/(4*scaleX));
+            var purpleLeft=2;
+            var purpleRight=numberOfX-3;
+            if(width<=500){
+                scaleX = 10;
+                scaleY = 10;
+                numberOfX = parseInt(width/(4*scaleX));
+                numberOfY = parseInt(height/(1.3*scaleY));
+                scalingFactor = scaleY/(numberOfY/2);
+                scalingHeightFactor = 2.5;
+                purpleLeft=0
+                purpleRight=numberOfX;   
+            }
+            else {
+                scalingFactor = scaleY/(numberOfY/2);
+                scalingHeightFactor = 1.8;
+            }
+            var Y = 0;
+            var purpleRightApplied = false;
+            var opacity = 0.1;
+            var xSpace = (4*scaleX);
+            var evenX = 0, oddX = xSpace/2;
+            var pinkLimit=numberOfY/2;
+            var heightY =0;
+            var cirleHeight = scaleY;
+            for (i=0; i<=numberOfY; i++) {
+                for (j=0; j<=numberOfX; j++) {
+                    c1.save();
+                    c1.beginPath();
+                    c1.globalAlpha = opacity;
+                    if ( i%2==0){
+                        c1.fillStyle = "black";
+                        // c1.ellipse(evenX + event["gamma"]*3, Y + event["beta"]*3, scaleX, scaleY, Math.PI, 0, 2 * Math.PI);
+                        c1.ellipse(evenX, Y, scaleX, scaleY, Math.PI, 0, 2 * Math.PI);
+                        evenX = evenX + xSpace;
+                    } 
+                    else {
+                        c1.fillStyle = "black";
+                        // c1.ellipse(oddX + event["gamma"]*3, Y + event["beta"]*3, scaleX, scaleY, Math.PI, 0, 2 * Math.PI);
+                        c1.ellipse(oddX, Y, scaleX, scaleY, Math.PI, 0, 2 * Math.PI);
+                        oddX = oddX + xSpace;
+                    }
+                    if (( j==purpleLeft && i<pinkLimit)){
+                        c1.fillStyle = "#f802ad";
+                    } else if((j==purpleRight && i>=pinkLimit)){
+                        c1.fillStyle = "#f802ad";
+                        purpleRightApplied = true;
+                    }
+                    c1.fill();
+                }
+                c1.restore();
+                //purple circle
+                if ( i%2 != 0 ) {
+                    purpleLeft++;
+                }
+                if ( i%2 == 0 && purpleRightApplied) {
+                    purpleRight--;
+                }
+                if(i!=0 && i<(numberOfY/2)){
+                    opacity = opacity + 0.1;  
+                    scaleY =  scaleY - scalingFactor;
+                }
+                else if (i>= (numberOfY/2)){
+                    opacity = opacity - 0.1;
+                    scaleY = scaleY + scalingFactor;
+                }
+                cirleHeight = scaleY;
+                heightY =  (scalingHeightFactor * scaleY);
+                evenX = 0;
+                oddX = xSpace/2;
+                Y = Y + heightY;
+             }
+            date = new Date();
+            console.log(`Image rendering done at ${date} | value in milliSeconds: ${date.getTime()}`);
+            canvasRenderTime = date.getTime() - canvasRenderStartTime;
+            console.log(`Drawing time: ${canvasRenderTime} ms`);
+            console.log(`Total to render page and plot on canvas : ${canvasRenderTime + pageLoadTime} ms`);
+        //}
+        </script>
+    </body>
+</html>
