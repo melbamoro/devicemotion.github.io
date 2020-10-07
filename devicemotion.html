@@ -27,8 +27,8 @@
             window.addEventListener('deviceorientation', function melbaEvent(event){
                 console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
             //document.getElementById('myCanvas').style.webkitTransform =
-            // document.getElementById('myCanvas').style.transform ='rotateZ(' + event.alpha + 'deg)';
-            document.getElementById('myCanvas').style.transform ='rotateX(' + event.beta + 'deg)';
+            document.getElementById('myCanvas').style.transform ='rotateZ(' + event.alpha + 'deg)';
+            // document.getElementById('myCanvas').style.transform ='rotateX(' + event.beta + 'deg)';
             // document.getElementById('myCanvas').style.transform ='rotateY(' + event.gamma + 'deg)';
             }); 
         }else{
