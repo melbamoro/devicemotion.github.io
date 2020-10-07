@@ -25,7 +25,15 @@
         var date;
         var pageLoadStartTime, canvasRenderStartTime, pageLoadTime, canvasRenderTime;
     
-    
+        if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', function melbaEvent(event){
+                    console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
+                document.getElementById('myCanvas').style.transform ='rotateZ(' + event.alpha + 'deg)';
+                // document.getElementById('myCanvas').style.transform ='rotateX(' + event.beta + 'deg)';
+                // document.getElementById('myCanvas').style.transform ='rotateY(' + event.gamma + 'deg)';
+                }); 
+            }
+            
         if(document.readyState === 'loading'){
             date = new Date();
             console.log(`Page starts to load at ${date} | value in milliSeconds: ${date.getTime()}`);
@@ -42,15 +50,6 @@
         }
 
         const onLoadListener = ()=>{        
-           
-            if (window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientation', function melbaEvent(event){
-                    console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
-                document.getElementById('myCanvas').style.transform ='rotateZ(' + event.alpha + 'deg)';
-                // document.getElementById('myCanvas').style.transform ='rotateX(' + event.beta + 'deg)';
-                // document.getElementById('myCanvas').style.transform ='rotateY(' + event.gamma + 'deg)';
-                }); 
-            }
             var width = canvas.width;
             var height = canvas.height;
             date = new Date();
