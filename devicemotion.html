@@ -19,74 +19,42 @@
     <body>
         <canvas id="myCanvas"></canvas>        
         <script>
-        // const onLoadListener = ()=>{
-        //         drawBridgetRiley(canvas);
-        // }       
+        var canvas=document.getElementById("myCanvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var date;
+        var pageLoadStartTime, canvasRenderStartTime, pageLoadTime, canvasRenderTime;
+    
+    
+        if(document.readyState === 'loading'){
+            date = new Date();
+            console.log(`Page starts to load at ${date} | value in milliSeconds: ${date.getTime()}`);
+            pageLoadStartTime = date.getTime();
+        }
         
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', function melbaEvent(event){
-                console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
-            //document.getElementById('myCanvas').style.webkitTransform =
-            document.getElementById('myCanvas').style.transform ='rotateZ(' + event.alpha + 'deg)';
-            // document.getElementById('myCanvas').style.transform ='rotateX(' + event.beta + 'deg)';
-            // document.getElementById('myCanvas').style.transform ='rotateY(' + event.gamma + 'deg)';
-            }); 
-        }else{
-            console.log("Not supported");
+        document.onreadystatechange =  (event)=> {
+            if (document.readyState === 'complete') {
+                date = new Date();
+                console.log(`Page finished loading at ${date} | value in milliSeconds: ${date.getTime()}`);
+                pageLoadTime = date.getTime() - pageLoadStartTime;
+                console.log(`Page load time: ${pageLoadTime} ms`);
+            }
         }
 
-        // if (('ondevicemotion' in window)) {
-        //     window.addEventListener('devicemotion', function(event) {
-        //         document.getElementById('acceleration-x').innerHTML = Math.round(event.acceleration.x);
-        //         document.getElementById('acceleration-y').innerHTML = Math.round(event.acceleration.y);
-        //         document.getElementById('acceleration-z').innerHTML = Math.round(event.acceleration.z);
-        //     });
-        // } else {
-        //     console.log("Not supported");
-        // }
-
-            
-        var canvas=document.getElementById("myCanvas");
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            var date;
-	        var pageLoadStartTime, canvasRenderStartTime, pageLoadTime, canvasRenderTime;
-    
-    
-            if(document.readyState === 'loading'){
-                date = new Date();
-                console.log(`Page starts to load at ${date} | value in milliSeconds: ${date.getTime()}`);
-                pageLoadStartTime = date.getTime();
+        const onLoadListener = ()=>{        
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', function melbaEvent(event){
+                    console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
+                document.getElementById('myCanvas').style.transform ='rotateZ(' + event.alpha + 'deg)';
+                // document.getElementById('myCanvas').style.transform ='rotateX(' + event.beta + 'deg)';
+                // document.getElementById('myCanvas').style.transform ='rotateY(' + event.gamma + 'deg)';
+                }); 
             }
+
         
-            document.onreadystatechange =  (event)=> {
-                if (document.readyState === 'complete') {
-                    date = new Date();
-                    console.log(`Page finished loading at ${date} | value in milliSeconds: ${date.getTime()}`);
-                    pageLoadTime = date.getTime() - pageLoadStartTime;
-                    console.log(`Page load time: ${pageLoadTime} ms`);
-                }
-            }
 
-        //function drawBridgetRiley(canvas){
             var width = canvas.width;
             var height = canvas.height;
-            // canvas.style.left = "0";
-            // canvas.style.top = "0";
-            // console.log("Left:"+canvas.style.left+ ", Top:"+canvas.style.top);
-            // console.log("event x"+evt.acceleration.x);
-            // console.log("event y"+evt.acceleration.y);
-            
-            // if (evt.acceleration.x > canvas.style.left) {
-            //     canvas.style.left = evt.acceleration.x;
-            // }
-            // if (evt.acceleration.y > canvas.style.top) {
-            //     canvas.style.top = evt.acceleration.y;
-            // }
-            
-            // //canvas.style.top = canvas.style.top + event["beta"]*3;
-            // console.log("Left:"+canvas.style.left + ", Top:"+canvas.style.top);
-            
             date = new Date();
             var c1 = canvas.getContext('2d');
             console.log(`Image rendering started at ${date} | value in milliSeconds: ${date.getTime()}`);
@@ -171,7 +139,7 @@
             canvasRenderTime = date.getTime() - canvasRenderStartTime;
             console.log(`Drawing time: ${canvasRenderTime} ms`);
             console.log(`Total to render page and plot on canvas : ${canvasRenderTime + pageLoadTime} ms`);
-        //}
+        }
         </script>
     </body>
 </html>
