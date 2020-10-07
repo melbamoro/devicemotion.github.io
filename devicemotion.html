@@ -16,7 +16,7 @@
         </style>
         
     </head>
-    <body>
+    <body onload="onLoadListener()">
         <canvas id="myCanvas"></canvas>        
         <script>
         var canvas=document.getElementById("myCanvas");
@@ -42,6 +42,7 @@
         }
 
         const onLoadListener = ()=>{        
+           
             if (window.DeviceOrientationEvent) {
                 window.addEventListener('deviceorientation', function melbaEvent(event){
                     console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
@@ -50,9 +51,6 @@
                 // document.getElementById('myCanvas').style.transform ='rotateY(' + event.gamma + 'deg)';
                 }); 
             }
-
-        
-
             var width = canvas.width;
             var height = canvas.height;
             date = new Date();
@@ -94,13 +92,11 @@
                     c1.globalAlpha = opacity;
                     if ( i%2==0){
                         c1.fillStyle = "black";
-                        // c1.ellipse(evenX + event["gamma"]*3, Y + event["beta"]*3, scaleX, scaleY, Math.PI, 0, 2 * Math.PI);
                         c1.ellipse(evenX, Y, scaleX, scaleY, Math.PI, 0, 2 * Math.PI);
                         evenX = evenX + xSpace;
                     } 
                     else {
                         c1.fillStyle = "black";
-                        // c1.ellipse(oddX + event["gamma"]*3, Y + event["beta"]*3, scaleX, scaleY, Math.PI, 0, 2 * Math.PI);
                         c1.ellipse(oddX, Y, scaleX, scaleY, Math.PI, 0, 2 * Math.PI);
                         oddX = oddX + xSpace;
                     }
